@@ -1,0 +1,79 @@
+import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import { Login } from './pages/Login';
+import { Signup } from './pages/Signup';
+import { Dashboard } from './pages/Dashboard';
+import { TraceExplorer } from './pages/TraceExplorer';
+import { WorkflowBuilder } from './pages/WorkflowBuilder';
+import { Explainability } from './pages/Explainability';
+import { AgentBuilder } from './pages/AgentBuilder';
+import { AuditLog } from './pages/AuditLog';
+import { Layout } from './components/Layout';
+import { PolicyGenerator } from './pages/PolicyGenerator';
+import { AgentHealth } from './pages/AgentHealth';
+import { IntegrationHub } from './pages/IntegrationHub';
+import { SafetyScanner } from './pages/SafetyScanner';
+import { RedTeam } from './pages/RedTeam';
+import { Agents, Policies, Workflows, Approvals } from './pages/Placeholder';
+import './index.css';
+
+const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
+  const { token } = useAuth();
+  // For demo: if token is null, check localStorage directly in case context hasn't updated
+  const storedToken = localStorage.getItem('guardforge_token');
+  return (token || storedToken) ? <>{children}</> : <Navigate to="/login" replace />;
+};
+
+function App() {
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        alert("Command Palette coming soon! Use Ctrl+G for Governance overview.");
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  return (
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route
+            path="/*"
+            element={
+              <PrivateRoute>
+                <Layout>
+                  <Routes>
+                    <Route index element={<Dashboard />} />
+                    <Route path="trace" element={<TraceExplorer />} />
+                    <Route path="explain" element={<Explainability />} />
+                    <Route path="agents" element={<Agents />} />
+                    <Route path="agents/builder" element={<AgentBuilder />} />
+                    <Route path="agents/health" element={<AgentHealth />} />
+                    <Route path="policies" element={<Policies />} />
+                    <Route path="policies/generator" element={<PolicyGenerator />} />
+                    <Route path="workflows" element={<Workflows />} />
+                    <Route path="workflows/designer" element={<WorkflowBuilder />} />
+                    <Route path="integrations" element={<IntegrationHub />} />
+                    <Route path="scanner" element={<SafetyScanner />} />
+                    <Route path="approvals" element={<Approvals />} />
+                    <Route path="redteam" element={<RedTeam />} />
+                    <Route path="audit" element={<AuditLog />} />
+                    <Route path="*" element={<Navigate to="/" replace />} />
+                  </Routes>
+                </Layout>
+              </PrivateRoute>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
+  );
+}
+
+export default App;

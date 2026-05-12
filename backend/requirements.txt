@@ -1,0 +1,14 @@
+# backend/requirements.txt
+fastapi[all]
+uvicorn[standard]
+sqlalchemy>=2.0
+alembic
+psycopg2-binary
+pydantic[email]
+python-jose[cryptography]
+passlib[bcrypt]
+python-multipart
+httpx
+langchain
+langgraph
+redis
