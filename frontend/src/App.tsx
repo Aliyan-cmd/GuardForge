@@ -2,6 +2,11 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { Landing } from './pages/Landing';
+import { Features } from './pages/Features';
+import { HowItWorks } from './pages/HowItWorks';
+import { Reviews } from './pages/Reviews';
+import { Docs } from './pages/Docs';
+import { Pricing } from './pages/Pricing';
 import { Login } from './pages/Login';
 import { Signup } from './pages/Signup';
 import { Dashboard } from './pages/Dashboard';
@@ -48,10 +53,15 @@ function App() {
 
   return (
     <AuthProvider>
-      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+      <BrowserRouter>
         <Routes>
           {/* Public landing + auth pages */}
           <Route path="/landing" element={<PublicRoute><Landing /></PublicRoute>} />
+          <Route path="/features" element={<PublicRoute><Features /></PublicRoute>} />
+          <Route path="/how-it-works" element={<PublicRoute><HowItWorks /></PublicRoute>} />
+          <Route path="/reviews" element={<PublicRoute><Reviews /></PublicRoute>} />
+          <Route path="/docs" element={<PublicRoute><Docs /></PublicRoute>} />
+          <Route path="/pricing" element={<PublicRoute><Pricing /></PublicRoute>} />
           <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
           <Route path="/signup" element={<PublicRoute><Signup /></PublicRoute>} />
 
@@ -86,8 +96,6 @@ function App() {
               </PrivateRoute>
             }
           />
-          {/* Root: redirect based on auth */}
-          <Route path="/" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

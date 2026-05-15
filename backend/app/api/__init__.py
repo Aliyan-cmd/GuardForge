@@ -2,7 +2,7 @@
 """Aggregate all API routers for FastAPI app."""
 from fastapi import APIRouter
 
-from . import auth, agents, policies, workflows, audit, approval, redteam, dashboard, reports, swarm
+from . import auth, agents, policies, workflows, audit, approval, redteam, dashboard, reports, swarm, reviews
 
 router = APIRouter()
 router.include_router(auth.router, prefix="/auth", tags=["auth"])
@@ -15,3 +15,4 @@ router.include_router(redteam.router, prefix="/redteam", tags=["redteam"])
 router.include_router(dashboard.router, prefix="/dashboard", tags=["dashboard"])
 router.include_router(reports.router, prefix="/reports", tags=["reports"])
 router.include_router(swarm.router, prefix="/swarm", tags=["swarm"])
+router.include_router(reviews.router, prefix="/reviews", tags=["reviews"])
