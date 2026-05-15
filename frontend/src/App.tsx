@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { Landing } from './pages/Landing';
 import { Login } from './pages/Login';
 import { Signup } from './pages/Signup';
 import { Dashboard } from './pages/Dashboard';
@@ -23,9 +24,14 @@ import './index.css';
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const { token } = useAuth();
-  // For demo: if token is null, check localStorage directly in case context hasn't updated
   const storedToken = localStorage.getItem('guardforge_token');
-  return (token || storedToken) ? <>{children}</> : <Navigate to="/login" replace />;
+  return (token || storedToken) ? <>{children}</> : <Navigate to="/landing" replace />;
+};
+
+const PublicRoute = ({ children }: { children: React.ReactNode }) => {
+  const { token } = useAuth();
+  const storedToken = localStorage.getItem('guardforge_token');
+  return (token || storedToken) ? <Navigate to="/" replace /> : <>{children}</>;
 };
 
 function App() {
@@ -44,8 +50,12 @@ function App() {
     <AuthProvider>
       <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
+          {/* Public landing + auth pages */}
+          <Route path="/landing" element={<PublicRoute><Landing /></PublicRoute>} />
+          <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+          <Route path="/signup" element={<PublicRoute><Signup /></PublicRoute>} />
+
+          {/* Protected app */}
           <Route
             path="/*"
             element={
@@ -76,6 +86,8 @@ function App() {
               </PrivateRoute>
             }
           />
+          {/* Root: redirect based on auth */}
+          <Route path="/" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
