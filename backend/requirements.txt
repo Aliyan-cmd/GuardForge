@@ -12,3 +12,5 @@ httpx
 langchain
 langgraph
 redis
+PyPDF2
+reportlab

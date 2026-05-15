@@ -1,19 +1,28 @@
-# backend/app/api/dashboard.py
-
 from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
+from ..database import get_db
+from ..models import User, Agent, Workflow, AuditLog, Policy
 from ..dependencies.auth import require_role
 from datetime import datetime, timedelta
 
 router = APIRouter()
 
 @router.get("/overview", tags=["dashboard"])
-def get_overview(user = Depends(require_role(["admin", "analyst", "viewer"]))):
-    # Mock data for analytics charts
+def get_overview(
+    db: Session = Depends(get_db),
+    user = Depends(require_role(["admin", "analyst", "viewer"]))
+):
+    # Calculate real stats from DB
+    total_agents = db.query(Agent).count()
+    active_workflows = db.query(Workflow).count()
+    violations_today = db.query(AuditLog).filter(AuditLog.severity == "critical").count()
+    
+    # Mock some data for charts since we don't have historical data yet
     return {
-        "total_agents": 5,
-        "active_workflows": 2,
+        "total_agents": total_agents,
+        "active_workflows": active_workflows,
         "executions_today": 12,
-        "violations_today": 1,
+        "violations_today": violations_today,
         "pending_approvals": 0,
         "redteam_tests": 3,
         "risk_score": 24, # Out of 100

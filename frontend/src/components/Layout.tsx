@@ -14,7 +14,9 @@ import {
   Sparkles,
   Heart,
   Blocks,
-  Scan
+  Scan,
+  Users,
+  LogOut
 } from 'lucide-react';
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
@@ -27,6 +29,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
     { label: 'Workflow Designer', icon: <Network size={18}/>, path: '/workflows/designer' },
     { label: 'Agent Architect', icon: <Cpu size={18}/>, path: '/agents/builder' },
     { label: 'Agent Health', icon: <Heart size={18}/>, path: '/agents/health' },
+    { label: 'Swarm Intelligence', icon: <Users size={18}/>, path: '/swarm' },
     { label: 'AI Policy Gen', icon: <Sparkles size={18}/>, path: '/policies/generator' },
     { label: 'Integrations', icon: <Blocks size={18}/>, path: '/integrations' },
     { label: 'Safety Scanner', icon: <Scan size={18}/>, path: '/scanner' },
@@ -62,19 +65,25 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
           ))}
         </nav>
 
-        <div className="p-4 mt-auto border-t border-white/5">
-           <div className="flex -space-x-2 mb-4 px-2">
+        <div className="p-4 mt-auto border-t border-white/5 space-y-4">
+           <div className="flex -space-x-2 px-2">
               <div className="h-6 w-6 rounded-full border-2 border-[#0d0b14] bg-blue-500 flex items-center justify-center text-[8px] font-bold">JD</div>
               <div className="h-6 w-6 rounded-full border-2 border-[#0d0b14] bg-green-500 flex items-center justify-center text-[8px] font-bold">AL</div>
               <div className="h-6 w-6 rounded-full border-2 border-[#0d0b14] bg-pink-500 flex items-center justify-center text-[8px] font-bold">SK</div>
               <div className="h-6 w-6 rounded-full border-2 border-[#0d0b14] bg-white/10 flex items-center justify-center text-[8px] font-bold text-gray-400">+2</div>
            </div>
-           <div className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/5">
-              <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-black text-xs">A</div>
-              <div className="overflow-hidden">
-                <p className="text-xs font-bold truncate">Aliyan Admin</p>
-                <p className="text-[10px] text-gray-500 uppercase tracking-widest font-black">Superuser</p>
-              </div>
+           
+           <div className="flex items-center justify-between gap-2">
+             <Link to="/profile" className="flex-1 flex items-center gap-3 p-2.5 bg-white/5 rounded-xl border border-white/5 hover:bg-white/10 transition-all">
+                <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-black text-xs shrink-0">A</div>
+                <div className="overflow-hidden">
+                  <p className="text-[10px] font-bold truncate">Aliyan Admin</p>
+                  <p className="text-[8px] text-gray-500 uppercase tracking-widest font-black">Superuser</p>
+                </div>
+             </Link>
+             <Link to="/signout" className="h-10 w-10 bg-red-500/10 rounded-xl border border-red-500/20 flex items-center justify-center text-red-500 hover:bg-red-500/20 transition-all shrink-0" title="Sign Out">
+                <LogOut size={18} />
+             </Link>
            </div>
         </div>
       </aside>

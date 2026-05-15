@@ -20,4 +20,4 @@ class GuardrailViolation(Base):
     rule_name = Column(String, nullable=False)
     message = Column(String, nullable=False)
     timestamp = Column(DateTime(timezone=True), server_default=func.now())
-    metadata = Column(JSON, nullable=True)  # additional details
+    violation_metadata = Column(JSON, nullable=True)  # additional details

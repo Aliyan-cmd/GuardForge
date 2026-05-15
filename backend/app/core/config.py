@@ -3,7 +3,7 @@ from pydantic import Field
 
 class Settings(BaseSettings):
     # Database URL
-    DATABASE_URL: str = Field(default="postgresql://guardforge:secret@localhost:5433/guardforge", env="DATABASE_URL")
+    DATABASE_URL: str = Field(default="sqlite:///./guardforge.db", env="DATABASE_URL")
     # JWT secret key
     JWT_SECRET_KEY: str = Field(default="super-secret-key", env="JWT_SECRET_KEY")
     # JWT algorithm

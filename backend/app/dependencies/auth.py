@@ -9,9 +9,16 @@ from ..core.config import settings
 from ..database import get_db
 from ..models.user import User
 
-def get_current_user(token: str = Depends(lambda: None), db: Session = Depends(get_db)):
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+
+security = HTTPBearer()
+
+def get_current_user(
+    auth: HTTPAuthorizationCredentials = Depends(security), 
+    db: Session = Depends(get_db)
+):
     # FastAPI will provide the token via Header Authorization: Bearer <token>
-    # Simplify: assume token is passed as query param for demo (in real prod use OAuth2PasswordBearer)
+    token = auth.credentials
     if not token:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Missing token")
     token_data = decode_access_token(token)

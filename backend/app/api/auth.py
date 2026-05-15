@@ -6,7 +6,7 @@ from ..core.security import verify_password, hash_password, create_access_token
 from ..core.config import settings
 from ..database import get_db
 from ..models.user import User
-from ..schemas.user import UserCreate, UserRead, Token
+from ..schemas.user import UserCreate, UserRead, Token, UserLogin
 
 router = APIRouter()
 
@@ -27,7 +27,7 @@ def signup(user_in: UserCreate, db: Session = Depends(get_db)):
     return user
 
 @router.post("/login", response_model=Token)
-def login(form: UserCreate, db: Session = Depends(get_db)):
+def login(form: UserLogin, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == form.email).first()
     if not user or not verify_password(form.password, user.hashed_password):
         raise HTTPException(status_code=401, detail="Invalid credentials")

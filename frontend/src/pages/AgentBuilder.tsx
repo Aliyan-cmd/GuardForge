@@ -5,7 +5,7 @@ import { Button } from '../components/Button';
 import { 
   Cpu, Shield, Zap, Wrench, 
   Settings, Key, BarChart3, 
-  Clock, DollarSign, ListChecks
+  Clock, DollarSign, ListChecks, Search
 } from 'lucide-react';
 
 export const AgentBuilder = () => {

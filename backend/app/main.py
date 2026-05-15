@@ -3,7 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .core.config import Settings
 from .database import Base, engine
-from .api import auth, agents, policies, workflows, audit, approval, redteam, dashboard, reports
+from . import models
+from .api import router as api_router
 
 app = FastAPI(title="GuardForge Backend", version="0.1.0")
 
@@ -21,16 +22,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include routers
-app.include_router(auth.router, prefix="/auth", tags=["auth"])
-app.include_router(agents.router, prefix="/agents", tags=["agents"])
-app.include_router(policies.router, prefix="/policies", tags=["policies"])
-app.include_router(workflows.router, prefix="/workflows", tags=["workflows"])
-app.include_router(audit.router, prefix="/audit", tags=["audit"])
-app.include_router(approval.router, prefix="/approvals", tags=["approvals"])
-app.include_router(redteam.router, prefix="/redteam", tags=["redteam"])
-app.include_router(dashboard.router, prefix="/dashboard", tags=["dashboard"])
-app.include_router(reports.router, prefix="/reports", tags=["reports"])
+# Include main router
+app.include_router(api_router)
 
 # Create DB tables if they don't exist (for MVP)
 @app.on_event("startup")

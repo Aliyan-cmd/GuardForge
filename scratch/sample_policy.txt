@@ -1,0 +1,1 @@
+This is a sample corporate compliance policy. It requires PII to be redacted and toxic language to be blocked.

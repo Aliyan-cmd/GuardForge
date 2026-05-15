@@ -10,7 +10,7 @@ export function useWebSocket(runId: string) {
   useEffect(() => {
     if (!runId) return;
     
-    const wsUrl = `${import.meta.env.VITE_WS_URL || 'ws://localhost:8000'}/ws/run/${runId}`;
+    const wsUrl = `${import.meta.env.VITE_WS_URL || 'ws://localhost:8000'}/workflows/ws/run/${runId}`;
     wsRef.current = new WebSocket(wsUrl);
 
     wsRef.current.onmessage = (ev) => {

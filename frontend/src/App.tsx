@@ -14,7 +14,10 @@ import { PolicyGenerator } from './pages/PolicyGenerator';
 import { AgentHealth } from './pages/AgentHealth';
 import { IntegrationHub } from './pages/IntegrationHub';
 import { SafetyScanner } from './pages/SafetyScanner';
+import { SwarmIntelligence } from './pages/SwarmIntelligence';
 import { RedTeam } from './pages/RedTeam';
+import { Profile } from './pages/Profile';
+import { Signout } from './pages/Signout';
 import { Agents, Policies, Workflows, Approvals } from './pages/Placeholder';
 import './index.css';
 
@@ -39,7 +42,7 @@ function App() {
 
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
@@ -64,6 +67,9 @@ function App() {
                     <Route path="approvals" element={<Approvals />} />
                     <Route path="redteam" element={<RedTeam />} />
                     <Route path="audit" element={<AuditLog />} />
+                    <Route path="swarm" element={<SwarmIntelligence />} />
+                    <Route path="profile" element={<Profile />} />
+                    <Route path="signout" element={<Signout />} />
                     <Route path="*" element={<Navigate to="/" replace />} />
                   </Routes>
                 </Layout>

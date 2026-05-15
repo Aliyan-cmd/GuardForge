@@ -16,8 +16,8 @@ export const Login = () => {
     try {
       await login(email, password);
       navigate('/');
-    } catch (err) {
-      setError('Invalid credentials');
+    } catch (err: any) {
+      setError(err.response?.data?.detail || 'Invalid credentials');
     }
   };
 

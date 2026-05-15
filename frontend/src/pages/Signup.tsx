@@ -17,8 +17,13 @@ export const Signup = () => {
     try {
       await signup(email, password, fullName);
       navigate('/');
-    } catch (err) {
-      setError('Registration failed. Try again.');
+    } catch (err: any) {
+      const message = err.response?.data?.detail;
+      if (Array.isArray(message)) {
+        setError(message[0].msg || 'Registration failed');
+      } else {
+        setError(message || 'Registration failed. Try again.');
+      }
     }
   };
 

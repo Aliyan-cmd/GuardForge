@@ -1,5 +1,7 @@
-# backend/app/api/policies.py
 from fastapi import APIRouter, Depends, UploadFile, File
+from sqlalchemy.orm import Session
+from ..database import get_db
+from ..models.policy import Policy
 from ..dependencies.auth import require_role
 import io
 import PyPDF2
@@ -7,8 +9,11 @@ import PyPDF2
 router = APIRouter()
 
 @router.get("/")
-def list_policies(user = Depends(require_role(["admin", "analyst"]))):
-    return [{"id": 1, "name": "PII Filter", "status": "active"}]
+def list_policies(
+    db: Session = Depends(get_db),
+    user = Depends(require_role(["admin", "analyst"]))
+):
+    return db.query(Policy).all()
 
 @router.post("/")
 def create_policy(data: dict, user = Depends(require_role(["admin"]))):
