@@ -4,7 +4,7 @@ from datetime import datetime
 class UserBase(BaseModel):
     email: EmailStr
     full_name: str | None = None
-    role: str = Field(default="viewer", description="User role: admin | analyst | viewer")
+    role: str = Field(default="admin", description="User role: admin | analyst | viewer")
 
 class UserCreate(UserBase):
     password: str = Field(min_length=8, description="Plain password for signup")

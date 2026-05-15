@@ -13,7 +13,7 @@ router = APIRouter()
 @router.get("/compliance/{workflow_id}", tags=["reports"])
 def generate_compliance_report(
     workflow_id: int, 
-    user = Depends(require_role(["admin", "analyst"]))
+    user = Depends(require_role(["admin", "analyst", "viewer"]))
 ):
     # Create PDF in memory
     buffer = BytesIO()

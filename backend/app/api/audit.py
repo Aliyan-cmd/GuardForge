@@ -11,7 +11,7 @@ router = APIRouter()
 def search_audit_logs(
     q: str = Query(..., description="Natural language query"),
     db: Session = Depends(get_db),
-    user = Depends(require_role(["admin", "analyst"]))
+    user = Depends(require_role(["admin", "analyst", "viewer"]))
 ):
     q_lower = q.lower()
     # Simple keyword search in details or agent_id
@@ -39,7 +39,7 @@ def search_audit_logs(
 @router.get("/logs", tags=["audit"])
 def get_logs(
     db: Session = Depends(get_db),
-    user = Depends(require_role(["admin", "analyst"]))
+    user = Depends(require_role(["admin", "analyst", "viewer"]))
 ):
     logs = db.query(AuditLog).order_by(AuditLog.timestamp.desc()).limit(50).all()
     return [

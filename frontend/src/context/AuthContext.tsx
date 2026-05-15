@@ -17,16 +17,33 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<{ email: string; role: string } | null>(null);
 
+  // Helper to decode JWT safely
+  const decodeJWT = (token: string) => {
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(window.atob(base64).split('').map((c) => {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+      return JSON.parse(jsonPayload);
+    } catch (e) {
+      console.error("Failed to decode JWT", e);
+      return null;
+    }
+  };
+
   // Load token from localStorage on mount
   useEffect(() => {
     const storedToken = localStorage.getItem('guardforge_token');
     if (storedToken) {
-      setToken(storedToken);
-      // Decode payload (simple base64 decode, not secure but OK for demo)
-      const payload = JSON.parse(atob(storedToken.split('.')[1]));
-      setUser({ email: payload.sub, role: payload.role });
-      // set axios default header
-      axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
+      const payload = decodeJWT(storedToken);
+      if (payload) {
+        setToken(storedToken);
+        setUser({ email: payload.sub, role: payload.role });
+        axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
+      } else {
+        localStorage.removeItem('guardforge_token');
+      }
     }
   }, []);
 
@@ -35,9 +52,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const newToken = response.data.access_token;
     localStorage.setItem('guardforge_token', newToken);
     setToken(newToken);
-    const payload = JSON.parse(atob(newToken.split('.')[1]));
-    setUser({ email: payload.sub, role: payload.role });
-    axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+    const payload = decodeJWT(newToken);
+    if (payload) {
+      setUser({ email: payload.sub, role: payload.role });
+      axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+    }
   };
 
   const logout = () => {

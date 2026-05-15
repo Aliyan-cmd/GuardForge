@@ -14,15 +14,24 @@ export const Signup = () => {
 
   const handle = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters long.');
+      return;
+    }
     try {
       await signup(email, password, fullName);
       navigate('/');
     } catch (err: any) {
-      const message = err.response?.data?.detail;
-      if (Array.isArray(message)) {
-        setError(message[0].msg || 'Registration failed');
+      const detail = err.response?.data?.detail;
+      if (Array.isArray(detail)) {
+        // FastAPI validation errors come as an array of objects
+        const msg = detail.map((d: any) => d.msg).join('. ');
+        setError(msg || 'Registration failed');
+      } else if (typeof detail === 'string') {
+        setError(detail);
       } else {
-        setError(message || 'Registration failed. Try again.');
+        setError('Registration failed. Please try again.');
       }
     }
   };
@@ -65,8 +74,10 @@ export const Signup = () => {
               className="w-full p-3 bg-white/5 border border-white/10 rounded-xl text-white focus:border-primary outline-none transition-all"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              minLength={8}
               required
             />
+            <p className="text-[10px] text-gray-600 mt-1 ml-1">Minimum 8 characters</p>
           </div>
         </div>
 

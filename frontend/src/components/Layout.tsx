@@ -19,8 +19,11 @@ import {
   LogOut
 } from 'lucide-react';
 
+import { useAuth } from '../context/AuthContext';
+
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
+  const { user } = useAuth();
 
   const navItems = [
     { label: 'Dashboard', icon: <LayoutDashboard size={18}/>, path: '/' },
@@ -75,10 +78,12 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
            
            <div className="flex items-center justify-between gap-2">
              <Link to="/profile" className="flex-1 flex items-center gap-3 p-2.5 bg-white/5 rounded-xl border border-white/5 hover:bg-white/10 transition-all">
-                <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-black text-xs shrink-0">A</div>
+                <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-black text-xs shrink-0 uppercase">
+                  {user?.email?.[0] || 'U'}
+                </div>
                 <div className="overflow-hidden">
-                  <p className="text-[10px] font-bold truncate">Aliyan Admin</p>
-                  <p className="text-[8px] text-gray-500 uppercase tracking-widest font-black">Superuser</p>
+                  <p className="text-[10px] font-bold truncate">{user?.email?.split('@')[0] || 'User'}</p>
+                  <p className="text-[8px] text-gray-500 uppercase tracking-widest font-black">{user?.role || 'Viewer'}</p>
                 </div>
              </Link>
              <Link to="/signout" className="h-10 w-10 bg-red-500/10 rounded-xl border border-red-500/20 flex items-center justify-center text-red-500 hover:bg-red-500/20 transition-all shrink-0" title="Sign Out">

@@ -11,7 +11,7 @@ router = APIRouter()
 @router.get("/")
 def list_policies(
     db: Session = Depends(get_db),
-    user = Depends(require_role(["admin", "analyst"]))
+    user = Depends(require_role(["admin", "analyst", "viewer"]))
 ):
     return db.query(Policy).all()
 
